@@ -7,6 +7,12 @@ A Twitch bot that sometimes replaces words with butt.
 Set these environment variables:
 
 * `TWITCH_BOT_TOKEN`: An OAuth token for the bot user.
-* `TWITCH_BOT_CHANNEL`: Channel the bot will chat into.
-* `TWITCH_BOT_MESSAGE_TARGET`: Amount of messages to wait in between buttages.
-* `TWITCH_BOT_MESSAGE_PROBABILITY`: From 0 to 1 ('.' decimal separator), the probabability the next message will be butted, will keep trying for every next message.
+
+## Commands
+
+* !help - Show commands
+* !info - Show your status
+* !joinme - Makes the bot join your stream!
+* !leaveme - Makes the bot leave your stream.
+* !setfrequency <0..n> - Set how many messages in between each response.
+* !setprobability <0..1> - Set the probability a response will be sent out.
