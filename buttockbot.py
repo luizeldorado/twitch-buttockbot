@@ -2,6 +2,7 @@ import butt
 import twitchio
 import random
 import os
+import psycopg2
 
 class ChannelInfo():
 	def __init__(self, name, messages_target, messages_probability):
@@ -13,12 +14,22 @@ class ChannelInfo():
 class ButtockBot(twitchio.Client):
 	def __init__(self):
 
-		self.twitch_bot_token = os.environ['TWITCH_BOT_TOKEN']
+		print('Starting...')
 
 		self.channels = []
 
+		# Get environment variables
+		self.database_url = os.environ['DATABASE_URL']
+		self.twitch_bot_token = os.environ['TWITCH_BOT_TOKEN']
+
+		# Connect to database
+		print('Connecting the database...')
+		self.conn = psycopg2.connect(self.database_url)
+		self.cur = self.conn.cursor()
+
+		# Connect to IRQ
+		print('Connecting to Twitch\'s IRQ...')
 		super().__init__(token=self.twitch_bot_token)
-		print('Finished initing')
 
 	async def event_ready(self):
 		print(f'Logged in as {self.nick}')
@@ -87,7 +98,10 @@ class ButtockBot(twitchio.Client):
 				await message.channel.send('Commands: !help !info !joinme !leaveme !setfrequency <0..n> !setprobability <0..1>')
 
 			elif args[0] == '!info':
-				await message.channel.send(f'@{message.author.name} {'Joined' if channel_info!=None else 'Not joined'}, frequency: {channel_info.messages_target}, probability: {channel_info.messages_probability}')
+				if channel_info != None:
+					await message.channel.send(f'@{message.author.name} Joined, frequency: {channel_info.messages_target}, probability: {channel_info.messages_probability}')
+				else:
+					await message.channel.send(f'@{message.author.name} Not joined')
 
 			elif args[0] == '!joinme':
 
